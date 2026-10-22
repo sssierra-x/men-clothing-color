@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>男装复色作战手册</title>
+<style>
+
+:root{
+  --paper:#FAF7F0; --paper2:#F2EDE1; --ink:#14110C; --ink2:#3A342A;
+  --line:#DFD6C4; --muted:#7A7161; --acc:#BF3A2B; --acc2:#8C1B1B;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.62}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 100px}
+
+.hero{padding:58px 0 34px}
+.kicker{font-size:13px;letter-spacing:.3em;color:var(--acc);font-weight:800;margin-bottom:14px}
+h1{font-size:clamp(34px,5.4vw,62px);line-height:1.04;margin:0;font-weight:900;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--acc)}
+.lede{font-size:clamp(15px,1.6vw,18px);color:var(--ink2);max-width:46em;margin:20px 0 0}
+.lede b{background:linear-gradient(transparent 62%,#F1D9B6 62%)}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.stat{border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px 16px;min-width:126px}
+.stat .n{font-size:24px;font-weight:900;line-height:1.1}
+.stat .t{font-size:11.5px;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+
+.tabs{position:sticky;top:0;z-index:60;background:rgba(250,247,240,.96);backdrop-filter:blur(12px);
+  border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:1100px;margin:0 auto;padding:10px 22px;display:flex;gap:8px;overflow-x:auto}
+.tabs button{flex:none;border:1px solid var(--line);background:#fff;border-radius:11px;
+  padding:10px 16px;font-size:14.5px;font-weight:800;color:var(--ink2);cursor:pointer;
+  font-family:inherit;transition:.16s;display:flex;align-items:center;gap:8px}
+.tabs button i{font-style:normal;font-size:12px;font-weight:900;color:var(--acc)}
+.tabs button:hover{border-color:var(--ink)}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabs button.on i{color:#F5B79A}
+
+.panel{display:none;padding-top:44px}
+.panel.on{display:block}
+
+.step-head{display:flex;align-items:flex-start;gap:18px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.step-no{font-size:56px;font-weight:900;line-height:.84;color:var(--acc);letter-spacing:-.04em;flex:none}
+.step-head h2{font-size:clamp(24px,3.1vw,33px);margin:0;font-weight:900}
+.step-head p{margin:6px 0 0;color:var(--muted);font-size:14.5px;max-width:52em}
+
+.note{margin-top:20px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--ink);
+  border-radius:0 13px 13px 0;padding:15px 19px;font-size:14.5px;color:var(--ink2)}
+.note b{color:var(--ink)}
+.warn{border-left-color:var(--acc);background:#FDF3F1}
+.warn b{color:var(--acc2)}
+
+/* process timeline */
+.proc{margin-top:26px;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+.proc-head{padding:14px 20px;background:var(--ink);color:#F7F2E7;font-size:13.5px;font-weight:800;letter-spacing:.04em;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.proc-head span{font-weight:600;color:#CFC6B4;font-size:12.5px;letter-spacing:0}
+.proc-body{padding:6px 20px 8px}
+.pstep{display:grid;grid-template-columns:46px 1fr;gap:16px;padding:16px 0;border-bottom:1px dashed var(--line)}
+.pstep:last-child{border-bottom:0}
+.pstep .idx{width:30px;height:30px;border-radius:50%;background:var(--paper2);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--acc)}
+.pstep h4{margin:2px 0 5px;font-size:15px;font-weight:900}
+.pstep p{margin:0;font-size:14px;color:var(--ink2)}
+.pstep .formula{margin-top:8px;background:var(--paper);border:1px solid var(--line);border-radius:9px;
+  padding:9px 13px;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+.pstep .formula code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+
+/* picker */
+.picker{margin-top:22px}
+.picker .grp{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.grp-label{font-size:11.5px;font-weight:900;letter-spacing:.14em;color:var(--muted);flex:none;width:84px;padding-top:9px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;
+  font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap;color:var(--ink2);font-family:inherit}
+.chip:hover{border-color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip .w{margin-left:7px;font-size:11.5px;color:var(--acc);font-weight:900}
+.chip.on .w{color:#F5B79A}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:24px}
+.card h3{margin:0 0 4px;font-size:18px;font-weight:900}
+.card .sub{font-size:12.5px;color:var(--muted)}
+
+.width-box{display:grid;grid-template-columns:minmax(150px,210px) 1fr;gap:26px;align-items:center}
+.big{font-size:clamp(42px,6.4vw,70px);font-weight:900;line-height:.95;letter-spacing:-.03em}
+.big small{font-size:.3em;font-weight:800;color:var(--muted);letter-spacing:0;display:block;margin-top:8px}
+.scale-track{display:flex;gap:4px}
+.scale-track span{flex:1;height:32px;border-radius:6px;background:var(--paper2)}
+.scale-track span.in{background:var(--acc)}
+.scale-track span.opt{background:#E8A08F}
+.scale-num{display:flex;gap:4px;margin-top:6px}
+.scale-num b{flex:1;text-align:center;font-size:11.5px;color:var(--muted);font-weight:700}
+.scale-num b.in{color:var(--acc)}
+.scale-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:11px}
+.scale-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.reasons{margin-top:20px;display:grid;gap:9px}
+.reason{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:12px 15px;border:1px solid var(--line);
+  border-radius:11px;background:var(--paper);font-size:14px}
+.reason b{font-weight:900;color:var(--acc);font-size:12.5px}
+
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.pcard{border:1px solid var(--line);border-radius:13px;padding:15px;background:#fff}
+.pcard .tag{display:inline-block;font-size:11.5px;font-weight:900;letter-spacing:.05em;padding:3px 9px;border-radius:6px;color:#fff;background:var(--ink)}
+.pcard.p0 .tag{background:var(--acc)}
+.pcard .def{font-size:12px;color:var(--muted);margin-top:7px;min-height:32px}
+.sws{display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:7px;margin-top:11px}
+.sws .item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.sws .item span.nm{font-size:11px;font-weight:700;color:var(--ink2);text-align:center;line-height:1.2}
+.sw{display:block;border-radius:8px}
+.sw-md{width:32px;height:32px}
+.sw-lg{width:42px;height:42px}
+.sw-sm{width:16px;height:16px;border-radius:4px}
+.empty{font-size:12.5px;color:#B3AA98;margin-top:10px}
+
+.win{display:grid;gap:9px;margin-top:20px}
+.wrow{display:grid;grid-template-columns:74px 1fr 1fr 108px;gap:14px;align-items:center;
+  border:1px solid var(--line);border-radius:13px;padding:13px 17px;background:#fff;cursor:pointer;transition:.15s}
+.wrow:hover{border-color:var(--ink)}
+.wrow.on{border-color:var(--acc);box-shadow:0 0 0 3px rgba(191,58,43,.09)}
+.wp{font-size:14.5px;font-weight:900;color:var(--acc)}
+.wrow .t1{font-size:14px;font-weight:700}
+.wrow .t2{font-size:13px;color:var(--muted)}
+.wthr{text-align:right}
+.wthr .v{font-size:23px;font-weight:900;line-height:1}
+.wthr .u{font-size:10.5px;color:var(--muted);display:block;margin-top:2px}
+
+.output{margin-top:14px;border-radius:13px;padding:17px 19px;background:var(--ink);color:#F7F2E7;font-size:14.5px}
+.output b{color:#FFC9A8}
+.output .line{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:9px}
+.output .pill{border:1px solid rgba(247,242,231,.28);border-radius:999px;padding:4px 11px;font-size:12.5px}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:#fff;gap:2px}
+.seg button{border:0;background:transparent;padding:7px 15px;border-radius:999px;font-size:13px;
+  font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--ink);color:#fff}
+
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13.5px}
+th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;letter-spacing:.09em;color:var(--muted);font-weight:900}
+td.n{font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--paper2)}
+
+/* map */
+.readlist{display:grid;gap:10px;margin-top:18px}
+.readlist .r{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:13px 16px;background:#fff;
+  border:1px solid var(--line);border-radius:11px;font-size:14px}
+.readlist .r i{font-style:normal;font-weight:900;color:var(--acc);font-size:13px}
+.map-table{margin-top:18px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff}
+.mhead,.mrow{display:grid;grid-template-columns:132px 94px 1fr 88px 78px 34px;gap:10px;align-items:center;
+  padding:12px 16px;border-bottom:1px solid var(--line);font-size:13.5px}
+.mhead{background:var(--paper2);font-size:11.5px;font-weight:900;letter-spacing:.08em;color:var(--muted)}
+.mrow{cursor:pointer;transition:.14s}
+.mrow:hover{background:#FBF7EE}
+.mrow .nm{font-weight:800}
+.mrow .wid{font-weight:900;color:var(--acc);font-variant-numeric:tabular-nums}
+.mrow .cls{font-size:11.5px;color:var(--muted)}
+.mrow .caret{color:var(--muted);font-size:11px;transition:.2s;text-align:center}
+.mrow.open .caret{transform:rotate(90deg)}
+.mdet{display:none;background:#FBF8F1;border-bottom:1px solid var(--line);padding:6px 16px 14px}
+.mdet.on{display:block}
+.mdet .grid{display:grid;grid-template-columns:64px 1fr 1.1fr 92px 74px;gap:9px;align-items:center;
+  padding:9px 10px;border-bottom:1px dashed var(--line);font-size:13px}
+.mdet .grid:last-child{border-bottom:0}
+.mdet .p{font-weight:900;color:var(--acc)}
+.mdet .thr{font-weight:900;font-variant-numeric:tabular-nums}
+.mdet .head{color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.06em;border-bottom:1px solid var(--line)}
+.mdet .detail{grid-column:1/-1;padding:8px 10px 2px;font-size:12.5px;color:var(--ink2);line-height:1.9}
+.mdet .detail em{font-style:normal;font-weight:900;color:var(--acc);margin-right:5px}
+.chipcol{display:inline-flex;align-items:center;gap:5px;margin-right:12px}
+.chipcol span.dot{width:12px;height:12px;border-radius:3px;border:1px solid rgba(20,17,12,.18);display:inline-block}
+
+footer{margin-top:70px;padding-top:22px;border-top:2px solid var(--ink);font-size:12px;color:var(--muted)}
+footer b{color:var(--ink2)}
+
+/* howto */
+.howto{margin:6px 0 14px;background:var(--ink);color:#F7F2E7;border-radius:18px;padding:22px 24px}
+.howto-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid rgba(247,242,231,.18);padding-bottom:13px;margin-bottom:16px}
+.ht-k{font-size:16px;font-weight:900;letter-spacing:.02em;color:#fff}
+.ht-t{font-size:12.5px;color:#B8AE9C}
+.howto-grid{display:grid;grid-template-columns:1fr 18px 1fr 18px 1fr 18px 1fr;gap:6px;align-items:stretch}
+.hstep{background:rgba(255,255,255,.055);border:1px solid rgba(247,242,231,.14);border-radius:12px;padding:13px 14px}
+.hstep.final{background:rgba(191,58,43,.20);border-color:rgba(245,183,154,.45)}
+.hn{font-size:11px;font-weight:900;letter-spacing:.14em;color:#F5B79A;margin-bottom:6px}
+.hb b{display:block;font-size:14.5px;font-weight:900;color:#fff;margin-bottom:5px}
+.hb span{display:block;font-size:12.5px;line-height:1.55;color:#CFC6B4}
+.harrow{display:flex;align-items:center;justify-content:center;color:#8C8272;font-size:14px}
+
+/* selector */
+.selector{margin:4px 0 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.sel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;
+  border-bottom:1px dashed var(--line);padding-bottom:14px;margin-bottom:4px}
+.sel-title{font-size:15.5px;font-weight:900;letter-spacing:.02em}
+.sel-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.sel-cur{text-align:right;line-height:1.35}
+.sel-cur b{display:block;font-size:19px;font-weight:900;color:var(--acc)}
+.sel-cur span{font-size:11.5px;color:var(--muted)}
+
+/* 主次分层 */
+.primary-card{border:2px solid var(--ink);box-shadow:6px 6px 0 rgba(20,17,12,.06)}
+.secondary-card{border:1px dashed var(--line);background:#FBF8F1;box-shadow:none;margin-top:16px}
+.block-tag{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:900;letter-spacing:.1em;
+  color:#fff;background:var(--ink);padding:5px 11px;border-radius:6px;margin-bottom:12px}
+.block-tag i{font-style:normal;color:#F5B79A}
+.block-tag.muted{background:#DCD3C1;color:var(--ink2)}
+.block-tag.muted i{color:#8C7F68}
+.order-hint{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:18px;padding-top:14px;
+  border-top:1px dashed var(--line);font-size:12px;color:var(--muted)}
+.order-hint .arw{font-weight:900;letter-spacing:.08em;color:var(--ink2);margin-right:2px}
+.pillp{font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.pillp.p0{background:var(--acc);color:#fff;border-color:var(--acc)}
+.order-hint .sep{color:#C6BCA6}
+.order-hint .stop{margin-left:auto;font-weight:900;color:var(--acc)}
+.season-row{display:flex;gap:10px;flex-wrap:wrap}
+.season-row .sitem{display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;position:relative}
+.season-row .sitem .rank{font-size:9.5px;font-weight:900;color:#9C9280}
+.season-row .sitem .nm{font-size:11px;color:var(--ink2);text-align:center;line-height:1.2}
+.season-note{font-size:12.5px;color:var(--muted);margin-top:13px;padding-top:11px;border-top:1px dashed var(--line)}
+
+@media(max-width:840px){
+  .howto-grid{grid-template-columns:1fr}
+  .harrow{transform:rotate(90deg);padding:2px 0}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .width-box{grid-template-columns:1fr}
+  .wrow{grid-template-columns:62px 1fr}
+  .wrow .t2{grid-column:2}
+  .wthr{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:8px}
+  .wthr .u{display:inline;margin:0}
+  .grp-label{width:100%;padding-top:0}
+  .reason{grid-template-columns:1fr;gap:3px}
+  .mhead{display:none}
+  .mrow{grid-template-columns:1fr 1fr;row-gap:4px}
+  .mrow .cls{grid-column:1/-1;order:-1}
+  .mrow .caret{display:none}
+  .mdet .grid{grid-template-columns:56px 1fr 1fr;row-gap:3px}
+  .mdet .grid .thr,.mdet .grid .wid{grid-column:span 1}
+}
+
+
+.sblock{margin-top:14px}
+.sblock+.sblock{border-top:1px dashed var(--line);padding-top:14px}
+.sblock-h{display:flex;align-items:baseline;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.sblock-h b{font-size:12.5px;font-weight:900;color:var(--ink)}
+.sblock-h span{font-size:11.5px;color:var(--muted)}
+
+.howto-grid{grid-template-columns:1fr 18px 1fr 18px 1fr}
+@media(max-width:820px){.howto-grid{grid-template-columns:1fr}.harrow{transform:rotate(90deg);justify-self:center}}
+.grp-tabs{display:flex;gap:8px;margin:16px 0 13px;border-bottom:1px solid var(--line);padding-bottom:12px;flex-wrap:wrap}
+.grp-tabs .gt{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-size:13.5px;
+  font-weight:800;color:var(--ink2);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px}
+.grp-tabs .gt i{font-style:normal;font-size:11px;font-weight:800;color:var(--muted);background:var(--paper2);
+  border-radius:999px;padding:1px 7px}
+.grp-tabs .gt.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grp-tabs .gt.on i{background:rgba(255,255,255,.16);color:#F5B79A}
+.card>.block-tag{margin-bottom:10px}
+footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.75}
+footer b{color:var(--ink2)}
+
+/* ===== v7 additions ===== */
+.proc{margin:18px 0 0;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.proc>summary{cursor:pointer;list-style:none;padding:14px 18px;font-size:13.5px;font-weight:900;
+  color:var(--ink2);display:flex;align-items:center;gap:10px}
+.proc>summary::-webkit-details-marker{display:none}
+.proc>summary::before{content:"＋";color:var(--acc);font-size:15px;font-weight:900}
+.proc[open]>summary::before{content:"−"}
+.proc>summary span{margin-left:auto;font-weight:600;color:var(--muted);font-size:11.5px}
+.proc .proc-body{padding:2px 18px 18px}
+
+.duo{display:grid;grid-template-columns:1.06fr .94fr;gap:14px;align-items:start}
+@media(max-width:900px){.duo{grid-template-columns:1fr}}
+
+.ladder{margin-top:6px}
+.lrow{display:grid;grid-template-columns:46px 1fr 92px;gap:8px;align-items:center;
+  padding:11px 10px;border:1px solid var(--line);border-radius:11px;background:#fff;margin-bottom:7px;
+  cursor:pointer;transition:.15s}
+.lrow:hover{border-color:#C4B79E}
+.lrow.on{border-color:var(--ink);background:#F6EFDF;box-shadow:3px 3px 0 rgba(20,17,12,.07)}
+.lrow .lp{font-size:12.5px;font-weight:900;text-align:center;border-radius:7px;padding:4px 0;background:var(--paper2);color:var(--ink2)}
+.lrow.on .lp{background:var(--ink);color:#fff}
+.lrow.p0 .lp{background:var(--acc);color:#fff}
+.lrow .lt b{display:block;font-size:13.5px;font-weight:900}
+.lrow .lt span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35}
+.lrow .ln{text-align:right;font-weight:900;font-size:19px;letter-spacing:-.01em}
+.lrow .ln small{display:block;font-size:10.5px;font-weight:600;color:var(--muted)}
+
+.crow{display:grid;grid-template-columns:38px 1fr;gap:9px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.crow:last-child{border-bottom:none}
+.crow .cp{font-size:11.5px;font-weight:900;padding:3px 0;text-align:center;border-radius:6px;height:22px}
+.crow .cp.p0{background:var(--acc);color:#fff}
+.crow .cp.p1{background:var(--ink);color:#fff}
+.crow .cp.p2{background:var(--paper2);color:var(--ink2);border:1px solid var(--line)}
+.crow .cp.p3{background:var(--paper2);color:var(--muted);border:1px dashed var(--line)}
+.cchips{display:flex;flex-wrap:wrap;gap:6px}
+.cchip{display:flex;flex-direction:column;align-items:center;gap:3px;width:46px}
+.cchip .nm{font-size:10.5px;color:var(--ink2);line-height:1.15;text-align:center}
+.crow .empty{font-size:12px;color:#A79C87}
+.crow.season{background:#FBF8F1;border-radius:9px;padding:10px;margin-top:7px;border-bottom:none}
+.crow.season .cp{background:#DCD3C1;color:var(--ink2)}
+
+.actbar{margin-top:14px;background:var(--ink);color:#F7F2E7;border-radius:15px;padding:17px 20px}
+.actbar .ab-h{font-size:12px;letter-spacing:.14em;color:#F5B79A;font-weight:900;margin-bottom:9px}
+.actbar .ab-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.actbar .ab-p{font-size:13px;font-weight:900;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(247,242,231,.22)}
+.actbar .ab-p.hi{background:var(--acc);border-color:var(--acc);color:#fff}
+.actbar .ab-tip{margin-top:10px;font-size:13px;line-height:1.55;color:#CFC6B4}
+
+.peers{margin-top:6px}
+.peer{display:grid;grid-template-columns:1.15fr 74px 84px 1fr;gap:10px;align-items:center;
+  padding:11px 4px;border-bottom:1px dashed var(--line);cursor:pointer}
+.peer:hover{background:#FBF6EC}
+.peer.on{background:#F6EFDF;border-radius:9px}
+.peer .pn{font-size:13px;font-weight:900}
+.peer .pn span{display:block;font-size:11px;font-weight:600;color:var(--muted)}
+.peer .pw{font-size:14px;font-weight:900;color:var(--acc)}
+.peer .pt{font-size:14px;font-weight:900}
+.peer .pt small{font-weight:600;font-size:10.5px;color:var(--muted)}
+.peer .pc{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.peer .pdot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(20,17,12,.2)}
+.peer .pnm{font-size:10.5px;color:var(--ink2);margin-right:4px}
+@media(max-width:780px){.peer{grid-template-columns:1fr 1fr;row-gap:6px}.peer .pc{grid-column:1/-1}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">男装 · 复色作战手册</div>
+  <h1>复色三步走<br><em>复多少 · 复哪些 · 怎么做</em></h1>
+  <p class="lede">每一节先给<b>结论</b>，需要看依据时再展开推导过程。第三步把前两步压成一张<b>执行卡</b>，直接照着做。</p>
+</header>
+
+<div class="howto">
+  <div class="howto-head">
+    <span class="ht-k">怎么用这套手册</span>
+    <span class="ht-t">三步依次走，第三步是落地执行卡</span>
+  </div>
+  <div class="howto-grid">
+    <div class="hstep">
+      <div class="hn">01</div>
+      <div class="hb"><b>复色复多少</b><span>定天花板：这个品类一个款最多铺几个色。宽度定了，后面才有边界。</span></div>
+    </div>
+    <div class="harrow">→</div>
+    <div class="hstep">
+      <div class="hn">02</div>
+      <div class="hb"><b>复色复哪些</b><span>在宽度内按 P0→P3 顺序取色；某级为空，后面整体上移。</span></div>
+    </div>
+    <div class="harrow">→</div>
+    <div class="hstep final">
+      <div class="hn">03</div>
+      <div class="hb"><b>具体怎么做</b><span>门槛 → 宽度 → 颜色合成一条动作：谁先做、做多宽、铺哪些色，一页看完。</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="selector">
+  <div class="sel-head">
+    <div>
+      <div class="sel-title">先选品类</div>
+      <div class="sel-sub">三个页签共用同一个品类，选一次即可全程跟随</div>
+    </div>
+    <div class="sel-cur" id="selCur">—</div>
+  </div>
+  <div class="grp-tabs" id="grpTabs"></div>
+  <div class="picker" id="picker"></div>
+</div>
+
+<div class="tabs"><div class="tabs-in">
+  <button data-t="t1" class="on"><i>01</i>复色复多少</button>
+  <button data-t="t2"><i>02</i>复色复哪些</button>
+  <button data-t="t3"><i>03</i>具体怎么做</button>
+</div></div>
+
+<!-- ===== TAB 1 ===== -->
+<div class="panel on" id="t1">
+  <div class="step-head">
+    <div class="step-no">01</div>
+    <div>
+      <h2>复色复多少</h2>
+      <p>一个款最多铺几个颜色。答案不是拍出来的，是从「加宽还能不能带来增量」算出来的。</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>先分清两个数字。</b>「复色宽度」= 一个款要铺几个颜色（SKC 数），管的是<b>铺几个</b>；「近 15 天日均销量门槛」= 一个款一天卖到多少件才算够热、值得复色，管的是<b>先给谁铺</b>。一个定天花板，一个定先后。
+  </div>
+
+  <div class="card" id="widthCard"></div>
+
+  <div class="card">
+    <h3>全品类推荐宽度一览</h3>
+    <div class="sub">同组细分各有自己的宽度；点击任意一行，三页同步切换。</div>
+    <table>
+      <thead><tr><th>类目</th><th>细分品类</th><th>推荐 SKC 宽度</th><th>P0 门槛</th></tr></thead>
+      <tbody id="widthTable"></tbody>
+    </table>
+  </div>
+
+  <details class="proc">
+    <summary>推导过程：这个宽度是怎么算出来的</summary>
+    <div class="proc-body">
+      <div class="pstep"><div class="idx">1</div><div>
+        <h4>先把宽度切成格子，看每格的真实产出</h4>
+        <p>把同一品类的所有款按「这个款铺了几个颜色」分组，铺 1 个色的归一堆、铺 2 个色的归一堆……再看每一堆的表现。这样才不会被品类整体的平均数掩盖掉宽度带来的差异。</p>
+        <div class="formula"><code>爆旺款效率 = 该宽度下（大爆款 + 爆款 + 旺款）÷ 该宽度在售款数</code><br><code>均件数 = 该宽度总件数 ÷ 该宽度在售款数</code></div>
+      </div></div>
+      <div class="pstep"><div class="idx">2</div><div>
+        <h4>再找「边际还在涨」的最后那个宽度</h4>
+        <p>从窄往宽一个个走，看每加一个色，均件数还在不在涨。涨到最后、下一个宽度开始掉头向下的那个位置，就是<b>最优宽度</b>——多铺一个色还能多卖，再多铺就开始摊薄。</p>
+        <div class="formula"><code>最优宽度 = 边际均件量连续为正的最后一个宽度（下一宽度转负）</code><br>例：长裤 0.7 → 2.4 → 0.2 连续为正，宽度 5 转 −3.7，故最优宽度 = 4</div>
+      </div></div>
+      <div class="pstep"><div class="idx">3</div><div>
+        <h4>剔掉「小样本看起来很美」的假信号</h4>
+        <p>有些宽度爆旺率动辄 80%、100%，但只有 1–3 个款，这种数字不能当结论用。所以先看样本量，再用大样本宽度段的爆旺效率交叉验证。</p>
+        <div class="formula">例：牛仔裤 skc=8 爆旺 50%，但 n=2；大样本里 skc=2~4 达 30.7%/36.5%/37.5%，后者才可采信</div>
+      </div></div>
+      <div class="pstep"><div class="idx">4</div><div>
+        <h4>最后叠加广告选中率，定出推荐区间</h4>
+        <p>件量和爆旺效率说的是「卖得动不动」，广告选中率说的是「运营愿不愿意投」。两者重合的区间才是真正该铺的宽度。</p>
+        <div class="formula"><code>广告选中率 = 该宽度下 SABC 广告数 ÷ 该宽度在售款数</code><br>三者取交集 → 得到「推荐 SKC 宽度」</div>
+      </div></div>
+    </div>
+  </details>
+</div>
+
+<!-- ===== TAB 2 ===== -->
+<div class="panel" id="t2">
+  <div class="step-head">
+    <div class="step-no">02</div>
+    <div>
+      <h2>复色复哪些</h2>
+      <p>宽度定了「铺几个」，接下来定「铺哪几个」。颜色不是按喜好挑，是按缺口和验证程度分层。</p>
+    </div>
+  </div>
+
+  <div class="card primary-card">
+    <div class="block-tag"><i>①</i>复色范围 · 这是最终要铺的色</div>
+    <h3 id="s2Title">—</h3>
+    <div class="sub">按 P0 → P3 顺序取；这是唯一决定「铺哪些色」的结论</div>
+    <div class="pgrid" id="priGrid" style="margin-top:18px"></div>
+    <div class="order-hint">
+      <span class="arw">取色顺序</span>
+      <span class="pillp p0">P0 必做</span><span class="sep">→</span>
+      <span class="pillp p1">P1 优先</span><span class="sep">→</span>
+      <span class="pillp p2">P2 补位</span><span class="sep">→</span>
+      <span class="pillp p3">P3 拓展</span>
+    </div>
+  </div>
+
+  <div class="card secondary-card">
+    <div class="block-tag muted"><i>②</i>季节补充色 · 只在复色范围之外加看</div>
+    <h3 style="font-size:16px">季节偏好升色 TOP5</h3>
+    <div class="sub">回答「这个季节哪个色在涨」，不参与上面的复色范围排序；冬季在上、夏季在下</div>
+    <div id="seasonBox" style="margin-top:16px"></div>
+  </div>
+
+  <div class="note warn">
+    <b>某级为空，则其后各级整体上移。</b>比如这个品类没有 P1 色，原本的 P2 色就顶上 P1 的位置、按 P1 的节奏铺——档位空着不等于少铺一层，而是优先级整体前移。
+  </div>
+
+  <details class="proc">
+    <summary>推导过程：颜色是怎么分层的</summary>
+    <div class="proc-body">
+      <div class="pstep"><div class="idx">1</div><div>
+        <h4>先算每个颜色「铺了多少」和「卖了多少」</h4>
+        <p>对同一品类里的每个颜色，分别算它在供给端和需求端的占比。只看销量会误判——卖得多可能只是因为铺得多。</p>
+        <div class="formula"><code>SKC 占比% = 该色在售 SKC 数 ÷ 该类目总在售 SKC 数</code><br><code>件量占比% = 该色支付件数 ÷ 该类目总支付件数</code></div>
+      </div></div>
+      <div class="pstep"><div class="idx">2</div><div>
+        <h4>相减得到供需差，判断缺还是过剩</h4>
+        <p>两个占比一减，就能看出这个颜色是「卖得比铺得多」还是「铺得比卖得多」。这是判断要不要加色的第一顺位指标。</p>
+        <div class="formula"><code>供需差 = 件量占比% − SKC 占比%</code><br>大于 0：供不应求，是缺口色，值得加；小于 0：供给过剩，先别加</div>
+      </div></div>
+      <div class="pstep"><div class="idx">3</div><div>
+        <h4>再用转化和 GMV 效率做二次校验</h4>
+        <p>供需差为正但转化极低的颜色，可能是偶然卖爆的几个款撑起来的；效率指标用来确认它是不是稳定能卖。</p>
+        <div class="formula"><code>转化% = 该色支付件数 ÷ 该色在售 SKC 数</code>　<code>GMV 效率 = 该色 GMV ÷ 该色在售 SKC 数</code></div>
+      </div></div>
+      <div class="pstep"><div class="idx">4</div><div>
+        <h4>叠加站外表现，分成 P0–P3 四档</h4>
+        <p>站内算完只是「站内头部色」，还要看这个颜色在站外跑不跑得动。站内外都验证过的最稳，只在站外跑出来的属于机会色，排最后。</p>
+        <div class="formula">P0 站内外同为头部色 → P1 站内供需差头部色 → P2 站内头部色 → P3 站外头部色</div>
+      </div></div>
+    </div>
+  </details>
+</div>
+
+<!-- ===== TAB 3 ===== -->
+<div class="panel" id="t3">
+  <div class="step-head">
+    <div class="step-no">03</div>
+    <div>
+      <h2>具体怎么做</h2>
+      <p>这一页是执行卡：同一个细分的门槛、宽度、颜色放在一起，看完就知道这个款该不该动、动到什么程度。</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>三步合成一条动作。</b>先看这个款上架多久、日均销量过没过该档门槛 → 过了就按推荐宽度铺满 → 颜色按 P0→P3 顺序取。右侧季节色只做加看，不改变上面的取色顺序。
+  </div>
+
+  <div class="card" id="actHead"></div>
+
+  <div class="duo">
+    <div class="card">
+      <h3>① 过没过门槛 · 六档优先级</h3>
+      <div class="sub">从上到下按上架时间由新到旧；点任意一档看动作。档位只决定「先做哪批款」，铺哪些色一律按 P0→P3 取</div>
+      <div class="ladder" id="ladder"></div>
+    </div>
+    <div class="card">
+      <h3>② 铺哪些色 · 复色范围 + 季节补充</h3>
+      <div class="sub" id="colorsSub">—</div>
+      <div id="colorList" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div class="actbar" id="actBar"></div>
+
+  <div class="card peers">
+    <h3 id="peerTitle">同组细分对照</h3>
+    <div class="sub">同组不同细分的宽度、门槛、颜色都不一样，别拿同组的其他细分直接套用</div>
+    <div id="peerList" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<footer>
+  <b>男装复色作战手册</b> · 颜色名称沿用统一色名，混合色以斜纹纹理表示。推荐宽度来自品类一层分析，同组细分按该宽度执行。
+</footer>
+
+</div>
+
+<script>
+const DATA = {"blocks": [{"id": 0, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "T恤/POLO", "sub": "T恤/POLO", "base": "T恤/POLO", "width": "4–8", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "11"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "11"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "11"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "22"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "35"}], "det": {"P0": ["黑色", "混合色", "白色", "藏青"], "P1": ["灰色", "杏色", "绿色"], "P2": ["深灰"], "P3": ["棕色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 藏青 | 红色", "s": "黑色 | 混合色 | 白色 | 藏青 | 红色", "xia": "混合色 | 白色 | 藏青 | 深灰 | 灰色", "dong": "黑色 | 红色 | 板岩灰 | 海蓝 | 亮蓝"}, "label": "T恤/POLO"}, {"id": 1, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "长裤", "sub": "长裤", "base": "长裤", "width": "4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "12"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "12"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "12"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "28"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "46"}], "det": {"P0": ["黑色", "灰色", "深灰", "浅灰"], "P1": ["卡其色", "军绿", "蓝色"], "P2": ["棕色"]}, "season": {"w": "黑色 | 灰色 | 深灰 | 藏青 | 军绿", "s": "黑色 | 混合色 | 灰色 | 卡其色 | 深灰", "xia": "混合色 | 卡其色 | 藏青 | 蓝色 | 海蓝", "dong": "黑色 | 灰色 | 灰白 | 浅灰 | 深灰"}, "label": "长裤"}, {"id": 2, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "衬衫/马甲", "sub": "衬衫/马甲", "base": "衬衫/马甲", "width": "4–8", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "8"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "28"}], "det": {"P0": ["黑色", "白色", "藏青", "卡其色"], "P1": ["蓝色", "红色"], "P2": ["混合色"], "P3": ["棕色"]}, "season": {"w": "黑色 | 混合色 | 白色 | 卡其色 | 藏青", "s": "黑色 | 白色 | 混合色 | 藏青 | 卡其色", "xia": "白色 | 浅蓝 | 混合色 | 藏青 | 咖啡色", "dong": "黑色 | 红色 | 深灰 | 深绿 | 酒红"}, "label": "衬衫/马甲"}, {"id": 3, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "牛仔裤", "sub": "牛仔裤", "base": "牛仔裤", "width": "3–5", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "10"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "15"}], "det": {"P0": ["黑色", "蓝色", "浅蓝", "灰色"], "P1": ["宝蓝", "藏青", "海蓝", "白色", "墨黑"], "P2": ["深灰"], "P3": ["浅灰"]}, "season": {"w": "黑色 | 蓝色 | 浅蓝 | 深灰 | 灰色", "s": "黑色 | 蓝色 | 浅蓝 | 深灰 | 灰色", "xia": "浅蓝 | 白色 | 天蓝 | 金属黑 | 午夜黑", "dong": "蓝色 | 藏青 | 黑色 | 海蓝 | 宝蓝"}, "label": "牛仔裤"}, {"id": 4, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "外套夹克", "sub": "外套夹克", "base": "外套夹克", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "7"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "7"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "7"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "29.25"}], "det": {"P0": ["黑色", "灰色"], "P1": ["白色", "深灰", "绿色"], "P2": ["藏青", "军绿", "卡其色"], "P3": ["棕色", "混合色", "蓝色"]}, "season": {"w": "黑色 | 军绿 | 藏青 | 灰色 | 深灰", "s": "黑色 | 军绿 | 灰色 | 藏青 | 卡其色", "xia": "白色 | 军绿 | 蓝色 | 橙红 | 天蓝", "dong": "黑色 | 深灰 | 米色 | 杏色 | 咖啡色"}, "label": "外套夹克"}, {"id": 5, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "卫衣/连帽衫", "sub": "卫衣/连帽衫", "base": "卫衣/连帽衫", "width": "4–7", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "8"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "27.4"}], "det": {"P0": ["黑色", "白色", "藏青"], "P1": ["深灰", "卡其色", "驼色"], "P2": ["混合色", "浅灰"], "P3": ["灰色", "粉色"]}, "season": {"w": "黑色 | 藏青 | 混合色 | 灰色 | 深灰", "s": "黑色 | 混合色 | 藏青 | 白色 | 灰色", "xia": "浅蓝 | 白色 | 太空灰 | 深绿 | 深灰", "dong": "黑色 | 红色 | 藏青 | 咖啡色 | 杏色"}, "label": "卫衣/连帽衫"}, {"id": 6, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "套装", "sub": "套装", "base": "套装", "width": "2–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "8"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "27.7"}], "det": {"P0": ["黑色", "混合色", "白色", "卡其色"], "P1": ["灰色", "绿色"], "P2": ["藏青"]}, "season": {"w": "黑色 | 混合色 | 藏青 | 白色 | 深灰", "s": "黑色 | 混合色 | 白色 | 藏青 | 卡其色", "xia": "混合色 | 白色 | 杏色 | 卡其色 | 粉红", "dong": "黑色 | 藏青 | 浅灰 | 军绿 | 深灰"}, "label": "套装"}, {"id": 7, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "正装-衬衫", "sub": "正装-衬衫", "base": "正装", "width": "3–6", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "10"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "10"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "10"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "22"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "35.3"}], "det": {"P0": ["黑色", "藏青", "浅蓝"], "P1": ["白色", "红色"], "P2": ["混合色"], "P3": ["棕色", "杏色"]}, "season": {"w": "白色 | 黑色 | 混合色 | 红色 | 藏青", "s": "白色 | 黑色 | 混合色 | 藏青 | 浅蓝", "xia": "白色 | 卡其色 | 黄色 | 浅蓝 | 天蓝", "dong": "黑色 | 红色 | 酒红 | 深绿 | 深灰"}, "label": "正装-衬衫"}, {"id": 8, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "正装-西裤", "sub": "正装-西裤", "base": "正装", "width": "3–6", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "10"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "10"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "10"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "26.2"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "43.05"}], "det": {"P1": ["灰色", "卡其色", "白色"], "P2": ["深灰"], "P3": ["棕色", "杏色", "浅蓝"], "P0": ["黑色", "藏青", "浅蓝"]}, "season": {"w": "黑色 | 藏青 | 灰色 | 深灰 | 卡其色", "s": "黑色 | 藏青 | 卡其色 | 灰色 | 深灰", "xia": "白色 | 深空黑 | 杏色 | 米色 | 卡其色", "dong": "黑色 | 棕色 | 宝蓝 | 银灰 | 深棕"}, "label": "正装-西裤"}, {"id": 9, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "正装-外套/马甲/套装", "sub": "正装-外套/马甲/套装", "base": "正装", "width": "3–6", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "4"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "4"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "4"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "9"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "19.15"}], "det": {"P1": ["白色", "灰色", "卡其色"], "P2": ["混合色"], "P3": ["棕色", "杏色", "浅蓝"], "P0": ["黑色", "藏青", "浅蓝"]}, "season": {"w": "黑色 | 藏青 | 混合色 | 灰色 | 酒红", "s": "黑色 | 藏青 | 混合色 | 灰色 | 白色", "xia": "杏色 | 白色 | 藏青 | 天蓝 | 浅绿", "dong": "黑色 | 深灰 | 红色 | 深棕 | 蓝色"}, "label": "正装-外套/马甲/套装"}, {"id": 10, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "短裤", "sub": "短裤", "base": "短裤", "width": "3–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "11"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "11"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "11"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "25"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "44"}], "det": {"P0": ["黑色", "混合色", "白色", "卡其色"], "P1": ["灰色", "蓝色"], "P2": ["藏青"]}, "season": {"w": "黑色 | 军绿 | 灰色 | 藏青 | 白色", "s": "黑色 | 混合色 | 灰色 | 白色 | 藏青", "xia": "混合色 | 灰色 | 卡其色 | 蓝色 | 孔雀蓝", "dong": "黑色 | 军绿 | 白色 | 深天蓝 | 深灰"}, "label": "短裤"}, {"id": 11, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "功能服-制服", "sub": "功能服-制服", "base": "功能服", "width": "1–2", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "8"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "18"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "28.2"}], "det": {"P0": ["黑色", "白色", "灰色"], "P1": ["军绿", "深灰"], "P2": ["藏青"], "P3": ["混合色", "宝蓝"]}, "season": {"w": "黑色 | 白色 | 藏青 | 卡其色 | 灰色", "s": "黑色 | 白色 | 灰色 | 军绿 | 藏青", "xia": "白色 | 藏青 | 橙红 | 天蓝 | 红色", "dong": "混合色 | 卡其色 | 黑色 | 咖啡色 | 米色"}, "label": "功能服-制服"}, {"id": 12, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "功能服-装扮服", "sub": "功能服-装扮服", "base": "功能服", "width": "1–2", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "4"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "4"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "4"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "9"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "14"}], "det": {"P0": ["黑色", "混合色", "白色"], "P1": ["红色", "橄榄绿", "橙色"], "P2": ["灰色", "宝蓝"]}, "season": {"w": "黑色 | 红色 | 白色 | 混合色 | 绿色", "s": "黑色 | 混合色 | 红色 | 白色 | 橄榄绿", "xia": "黑色 | 橄榄绿 | 白色 | 粉红 | 橙色", "dong": "红色 | 绿色 | 巧克力色 | 混合色 | 酒红"}, "label": "功能服-装扮服"}, {"id": 13, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "毛衣/开衫/针织", "sub": "毛衣/开衫/针织", "base": "毛衣/开衫/针织", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "9"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "9"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "9"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "20"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "31"}], "det": {"P0": ["黑色", "白色"], "P1": ["藏青", "象牙白", "杏色"], "P2": ["灰色", "深灰"], "P3": ["棕色", "混合色"]}, "season": {"w": "黑色 | 白色 | 藏青 | 深灰 | 灰色", "s": "黑色 | 深灰 | 白色 | 灰色 | 藏青", "xia": "白色 | 橄榄绿 | 橙色 | 黑色 | 卡其色", "dong": "深灰 | 红色 | 藏青 | 浅灰 | 蓝色"}, "label": "毛衣/开衫/针织"}, {"id": 14, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "棉服/羽绒服", "sub": "棉服/羽绒服", "base": "棉服/羽绒服", "width": "2–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "6.25"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "6.25"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "6.25"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "27.75"}], "det": {"P0": ["黑色", "灰色"], "P1": ["蓝色", "卡其色", "深灰", "橙色"], "P2": ["藏青", "军绿"], "P3": ["棕色", "混合色"]}, "season": {"w": "黑色 | 藏青 | 灰色 | 卡其色 | 军绿", "s": "黑色 | 深灰 | 藏青 | 军绿 | 卡其色", "xia": "军绿 | 红色 | 杏色 | 藏青 | 深灰", "dong": "黑色 | 灰色 | 深棕 | 午夜黑 | 卡其色"}, "label": "棉服/羽绒服"}, {"id": 15, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "背心上衣", "sub": "背心上衣", "base": "背心上衣", "width": "3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "11"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "11"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "11"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "22.1"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "42.1"}], "det": {"P0": ["黑色", "混合色", "白色", "灰色"], "P1": ["炭黑", "杏色"], "P2": ["藏青"], "P3": ["棕色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 灰色 | 藏青", "s": "黑色 | 白色 | 混合色 | 深灰 | 灰色", "xia": "深灰 | 酒红 | 杏色 | 浅灰 | 烟黑", "dong": "黑色 | 宝蓝 | 混合色 | 军绿 | 橄榄绿"}, "label": "背心上衣"}, {"id": 16, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "风衣/大衣", "sub": "风衣/大衣", "base": "风衣/大衣", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "8"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "28"}], "det": {"P0": ["黑色", "卡其色", "灰色"], "P1": ["白色", "浅灰"], "P2": ["藏青", "军绿"], "P3": ["棕色", "深灰"]}, "season": {"w": "黑色 | 灰色 | 藏青 | 卡其色 | 深灰", "s": "黑色 | 卡其色 | 藏青 | 军绿 | 灰色", "xia": "灰色 | 银灰 | 浅灰 | 军绿 | 亮蓝", "dong": "黑色 | 深灰 | 藏青 | 咖啡色 | 混合色"}, "label": "风衣/大衣"}, {"id": 17, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "传统服饰", "sub": "传统服饰", "base": "传统服饰", "width": "2", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "4.5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "4.5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "4.5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "8"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "11.5"}], "det": {"P0": ["黑色", "白色", "混合色"], "P1": ["红色", "藏青", "深绿"], "P2": ["棕色", "灰色"]}, "season": {"w": "黑色 | 白色 | 藏青 | 卡其色 | 灰色", "s": "黑色 | 白色 | 混合色 | 藏青 | 红色", "xia": "白色 | 混合色 | 深棕 | 红色 | 浅灰", "dong": "黑色 | 藏青 | 卡其色 | 军绿 | 米色"}, "label": "传统服饰"}, {"id": 18, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "泳衣泳裤", "sub": "泳衣泳裤", "base": "泳衣泳裤", "width": "3–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "6"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "10.5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "10.5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "10.5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "19"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "26.9"}], "det": {"P0": ["混合色", "黑色", "藏青"], "P1": ["湖蓝", "灰色", "绿色", "蓝色"], "P2": ["白色"], "P3": ["浅蓝"]}, "season": {"w": "黑色 | 混合色 | 藏青 | 白色 | 翠绿", "s": "混合色 | 黑色 | 藏青 | 白色 | 蓝色", "xia": "混合色 | 粉红 | 军绿 | 浅蓝 | 橄榄绿", "dong": "黑色 | 藏青 | 白色 | 孔雀蓝 | 红色"}, "label": "泳衣泳裤"}, {"id": 19, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "打底/压缩", "sub": "打底/压缩", "base": "打底/压缩", "width": "3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "6"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "16"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "16"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "16"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "38"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "54"}], "det": {"P0": ["黑色", "白色", "混合色", "藏青"], "P1": ["酒红", "红色", "天蓝"], "P2": ["灰色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 藏青 | 灰色", "s": "黑色 | 白色 | 藏青 | 灰色 | 红色", "xia": "灰色 | 白色 | 藏青 | 银灰 | 湖蓝", "dong": "黑色 | 混合色 | 浅灰 | 金色 | 军绿"}, "label": "打底/压缩"}, {"id": 20, "grp": "男装（时尚）", "cls": "男装（时尚）", "l1": "防晒衫", "sub": "防晒衫", "base": "防晒衫", "width": "4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "6"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "9.5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "9.5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "9.5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "16"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "17.1"}], "det": {"P0": ["黑色", "混合色", "藏青", "蓝色", "宝蓝"], "P1": ["白色", "天蓝"]}, "season": {"w": "黑色 | 混合色 | 白色 | 天蓝 | 浅灰", "s": "混合色 | 黑色 | 白色 | 天蓝 | 浅灰", "xia": "混合色 | 湖蓝 | 灰色 | 品红 | 浅蓝", "dong": "黑色 | 天蓝 | 藏青 | 宝蓝 | 红色"}, "label": "防晒衫"}, {"id": 21, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "T恤/POLO", "sub": "T恤/POLO", "base": "T恤/POLO", "width": "4–8", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "6"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "12"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "12"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "12"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "24"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "37.85"}], "det": {"P0": ["黑色", "混合色", "白色", "藏青"], "P1": ["浅绿", "灰色", "深灰"], "P2": ["红色"], "P3": ["棕色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 藏青 | 红色", "s": "黑色 | 混合色 | 白色 | 藏青 | 红色", "xia": "混合色 | 白色 | 藏青 | 深灰 | 灰色", "dong": "黑色 | 红色 | 板岩灰 | 海蓝 | 亮蓝"}, "label": "T恤/POLO"}, {"id": 22, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "长裤", "sub": "长裤", "base": "长裤", "width": "4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "10"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "10"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "10"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "21"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "36"}], "det": {"P0": ["黑色", "灰色", "深灰"], "P1": ["卡其色", "军绿", "蓝色"], "P2": ["混合色"], "P3": ["棕色", "浅灰"]}, "season": {"w": "黑色 | 灰色 | 深灰 | 藏青 | 军绿", "s": "黑色 | 混合色 | 灰色 | 卡其色 | 深灰", "xia": "混合色 | 卡其色 | 藏青 | 蓝色 | 海蓝", "dong": "黑色 | 灰色 | 灰白 | 浅灰 | 深灰"}, "label": "长裤"}, {"id": 23, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "套装", "sub": "套装", "base": "套装", "width": "2–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "8"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "16"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "25"}], "det": {"P0": ["黑色", "混合色", "白色", "卡其色"], "P1": ["灰色", "深灰", "蓝色"], "P2": ["藏青"]}, "season": {"w": "黑色 | 混合色 | 藏青 | 白色 | 深灰", "s": "黑色 | 混合色 | 白色 | 藏青 | 卡其色", "xia": "混合色 | 白色 | 杏色 | 卡其色 | 粉红", "dong": "黑色 | 藏青 | 浅灰 | 军绿 | 深灰"}, "label": "套装"}, {"id": 24, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "外套夹克", "sub": "外套夹克", "base": "外套夹克", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "7"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "7"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "7"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "15"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "22.9"}], "det": {"P0": ["黑色", "灰色"], "P1": ["白色", "绿色", "深灰"], "P2": ["军绿", "藏青", "卡其色"], "P3": ["棕色", "混合色", "蓝色"]}, "season": {"w": "黑色 | 军绿 | 藏青 | 灰色 | 深灰", "s": "黑色 | 军绿 | 灰色 | 藏青 | 卡其色", "xia": "白色 | 军绿 | 蓝色 | 橙红 | 天蓝", "dong": "黑色 | 深灰 | 米色 | 杏色 | 咖啡色"}, "label": "外套夹克"}, {"id": 25, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "球衣类型", "sub": "球衣类型", "base": "球衣类型", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "3.5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "3.5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "3.5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "3.8"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "3.9"}], "det": {"P0": ["黑色", "蓝色"], "P1": ["橙色", "湖蓝", "黄色"], "P2": ["棕色", "混合色", "灰色"]}, "season": {"w": "混合色 | 黑色 | 白色 | 蓝色 | 藏青", "s": "混合色 | 黑色 | 白色 | 蓝色 | 红色", "xia": "混合色 | 海蓝 | 红色 | 浅蓝 | 银灰", "dong": "黑色 | 蓝色 | 藏青 | 绿色 | 深绿"}, "dup": 1, "label": "球衣类型（外套夹克下）"}, {"id": 26, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "短裤", "sub": "短裤", "base": "短裤", "width": "3–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "7"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "15"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "15"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "15"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "31.9"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "69"}], "det": {"P0": ["黑色", "混合色", "白色", "藏青"], "P1": ["卡其色", "深灰", "灰色", "浅灰"]}, "season": {"w": "黑色 | 军绿 | 灰色 | 藏青 | 白色", "s": "黑色 | 混合色 | 灰色 | 白色 | 藏青", "xia": "混合色 | 灰色 | 卡其色 | 蓝色 | 孔雀蓝", "dong": "黑色 | 军绿 | 白色 | 深天蓝 | 深灰"}, "label": "短裤"}, {"id": 27, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "衬衫/马甲", "sub": "衬衫/马甲", "base": "衬衫/马甲", "width": "4–8", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "9"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "9"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "9"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "17.9"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "28.45"}], "det": {"P0": ["黑色", "白色", "藏青", "卡其色"], "P1": ["军绿", "灰色"], "P2": ["混合色"], "P3": ["棕色"]}, "season": {"w": "黑色 | 混合色 | 白色 | 卡其色 | 藏青", "s": "黑色 | 白色 | 混合色 | 藏青 | 卡其色", "xia": "白色 | 浅蓝 | 混合色 | 藏青 | 咖啡色", "dong": "黑色 | 红色 | 深灰 | 深绿 | 酒红"}, "label": "衬衫/马甲"}, {"id": 28, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "打底/压缩", "sub": "打底/压缩", "base": "打底/压缩", "width": "3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "12"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "12"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "12"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "21"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "37"}], "det": {"P0": ["黑色", "白色", "藏青", "灰色"], "P1": ["蓝色", "混合色", "银灰", "湖蓝"], "P2": ["红色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 藏青 | 灰色", "s": "黑色 | 白色 | 藏青 | 灰色 | 红色", "xia": "灰色 | 白色 | 藏青 | 银灰 | 湖蓝", "dong": "黑色 | 混合色 | 浅灰 | 金色 | 军绿"}, "label": "打底/压缩"}, {"id": 29, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "普通背心", "sub": "普通背心", "base": "普通背心", "width": "3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "6.5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "13"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "13"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "13"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "26"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "44.3"}], "det": {"P0": ["黑色", "白色", "混合色", "灰色"], "P1": ["深灰", "荧光绿", "荧光黄", "烟黑"], "P2": ["棕色"]}, "season": {"w": "黑色 | 白色 | 混合色 | 灰色 | 藏青", "s": "黑色 | 白色 | 混合色 | 深灰 | 灰色", "xia": "深灰 | 酒红 | 杏色 | 浅灰 | 烟黑", "dong": "黑色 | 宝蓝 | 混合色 | 军绿 | 橄榄绿"}, "label": "普通背心"}, {"id": 30, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "球衣类型", "sub": "球衣类型", "base": "球衣类型", "width": "4–7", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "4"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "4"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "4"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "7.5"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "8.25"}], "det": {"P1": ["绿色", "蓝色", "红色"], "P2": ["灰色", "棕色"], "P0": ["混合色", "黑色", "白色"]}, "season": {"w": "混合色 | 黑色 | 白色 | 蓝色 | 藏青", "s": "混合色 | 黑色 | 白色 | 蓝色 | 红色", "xia": "混合色 | 海蓝 | 红色 | 浅蓝 | 银灰", "dong": "黑色 | 蓝色 | 藏青 | 绿色 | 深绿"}, "dup": 2, "label": "球衣类型（背心上衣下）"}, {"id": 31, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "卫衣/连帽衫", "sub": "卫衣/连帽衫", "base": "卫衣/连帽衫", "width": "4–7", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "8"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "29.4"}], "det": {"P0": ["黑色", "藏青", "白色", "灰色"], "P1": ["军绿", "深灰"], "P2": ["混合色"], "P3": ["粉色"]}, "season": {"w": "黑色 | 藏青 | 混合色 | 灰色 | 深灰", "s": "黑色 | 混合色 | 藏青 | 白色 | 灰色", "xia": "浅蓝 | 白色 | 太空灰 | 深绿 | 深灰", "dong": "黑色 | 红色 | 藏青 | 咖啡色 | 杏色"}, "label": "卫衣/连帽衫"}, {"id": 32, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "球衣类型", "sub": "球衣类型", "base": "球衣类型", "width": "4–7", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "2"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "2.5"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "2.5"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "2.5"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "6.2"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "7.3"}], "det": {"P0": ["黑色", "白色"], "P1": ["蓝色", "黄色", "红色"], "P2": ["混合色"], "P3": ["灰色", "粉色", "藏青"]}, "season": {"w": "混合色 | 黑色 | 白色 | 蓝色 | 藏青", "s": "混合色 | 黑色 | 白色 | 蓝色 | 红色", "xia": "混合色 | 海蓝 | 红色 | 浅蓝 | 银灰", "dong": "黑色 | 蓝色 | 藏青 | 绿色 | 深绿"}, "dup": 3, "label": "球衣类型（卫衣/连帽衫下）"}, {"id": 33, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "毛衣/开衫/针织", "sub": "毛衣/开衫/针织", "base": "毛衣/开衫/针织", "width": "2–3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "7.25"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "7.25"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "7.25"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "19.4"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "31.85"}], "det": {"P0": ["黑色", "白色"], "P1": ["藏青", "卡其色", "咖啡色"], "P2": ["深灰", "灰色"], "P3": ["棕色", "杏色", "混合色"]}, "season": {"w": "黑色 | 白色 | 藏青 | 深灰 | 灰色", "s": "黑色 | 深灰 | 白色 | 灰色 | 藏青", "xia": "白色 | 橄榄绿 | 橙色 | 黑色 | 卡其色", "dong": "深灰 | 红色 | 藏青 | 浅灰 | 蓝色"}, "label": "毛衣/开衫/针织"}, {"id": 34, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "泳衣泳裤", "sub": "泳衣泳裤", "base": "泳衣泳裤", "width": "3–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "5"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "10"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "10"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "10"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "17"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "28.7"}], "det": {"P0": ["混合色", "黑色", "藏青", "蓝色"], "P1": ["白色", "灰色"], "P2": ["浅蓝"]}, "season": {"w": "黑色 | 混合色 | 藏青 | 白色 | 翠绿", "s": "混合色 | 黑色 | 藏青 | 白色 | 蓝色", "xia": "混合色 | 粉红 | 军绿 | 浅蓝 | 橄榄绿", "dong": "黑色 | 藏青 | 白色 | 孔雀蓝 | 红色"}, "label": "泳衣泳裤"}, {"id": 35, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "功能服", "sub": "功能服", "base": "功能服", "width": "1–2", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "11"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "11"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "11"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "20.8"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "37.8"}], "det": {"P0": ["黑色", "白色"], "P1": ["军绿", "浅灰", "墨黑"], "P2": ["藏青"], "P3": ["混合色", "灰色", "宝蓝"]}, "season": {"w": "黑色 | 军绿 | 橄榄绿 | 灰色 | 混合色", "s": "黑色 | 白色 | 军绿 | 藏青 | 浅灰", "xia": "浅灰 | 白色 | 藏青 | 卡其色 | 宝蓝", "dong": "黑色 | 橄榄绿 | 军绿 | 灰色 | 混合色"}, "label": "功能服"}, {"id": 36, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "棉服/羽绒服", "sub": "棉服/羽绒服", "base": "棉服/羽绒服", "width": "2–4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "4"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "7"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "7"}, {"pri": "P3", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "7"}, {"pri": "P4", "time": "近90-305天", "type": "非应季长青款", "thr": "15"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "21.7"}], "det": {"P0": ["黑色", "卡其色"], "P1": ["藏青", "蓝色", "灰色", "深棕"], "P2": ["深灰", "军绿"], "P3": ["棕色", "混合色"]}, "season": {"w": "黑色 | 藏青 | 灰色 | 卡其色 | 军绿", "s": "黑色 | 深灰 | 藏青 | 军绿 | 卡其色", "xia": "军绿 | 红色 | 杏色 | 藏青 | 深灰", "dong": "黑色 | 灰色 | 深棕 | 午夜黑 | 卡其色"}, "label": "棉服/羽绒服"}, {"id": 37, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "连体/背带", "sub": "连体/背带", "base": "连体/背带", "width": "3", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "7"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "7"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "7"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "11.2"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "21.6"}], "det": {"P0": ["黑色"], "P1": ["白色", "浅灰", "太空灰", "浅绿"], "P2": ["藏青", "灰色", "蓝色"], "P3": ["军绿", "棕色", "深灰", "卡其色"]}, "season": {"w": "黑色 | 白色 | 蓝色 | 灰色 | 藏青", "s": "黑色 | 白色 | 藏青 | 灰色 | 蓝色", "xia": "白色 | 藏青 | 军绿 | 灰色 | 浅灰", "dong": "黑色 | 深灰 | 太空灰 | 深空黑 | 红色"}, "label": "连体/背带"}, {"id": 38, "grp": "男装（运动）", "cls": "男装（运动）", "l1": "防晒衫", "sub": "防晒衫", "base": "防晒衫", "width": "4", "rows": [{"pri": "P0", "time": "近7天", "type": "7天内上架热卖款", "thr": "3"}, {"pri": "P1", "time": "近8-30天", "type": "8-30天内上架热卖款", "thr": "8"}, {"pri": "P2", "time": "近31天-90天", "type": "31天-90天内上架热卖款", "thr": "8"}, {"pri": "P3", "time": "近90-305天", "type": "非应季长青款", "thr": "8"}, {"pri": "P4", "time": "T365±60", "type": "去年同期上架，去年同期热卖", "thr": "12"}, {"pri": "P5", "time": "425天以上", "type": "上架时间超1年近期热卖款", "thr": "15.6"}], "det": {"P0": ["黑色", "白色", "天蓝", "浅灰", "藏青"], "P1": ["混合色"]}, "season": {"w": "黑色 | 混合色 | 白色 | 天蓝 | 浅灰", "s": "混合色 | 黑色 | 白色 | 天蓝 | 浅灰", "xia": "混合色 | 湖蓝 | 灰色 | 品红 | 浅蓝", "dong": "黑色 | 天蓝 | 藏青 | 宝蓝 | 红色"}, "label": "防晒衫"}], "colors": {"黑色": "#141414", "墨黑": "#0B0B0B", "炭黑": "#2B2B2B", "烟黑": "#3B3B3B", "深空黑": "#161616", "白色": "#FFFFFF", "象牙白": "#F4EEDF", "灰白": "#E6E6E4", "混合色": "MIX", "浅灰": "#D3D3D1", "灰色": "#9B9B99", "深灰": "#55555A", "太空灰": "#8B8F94", "板岩灰": "#6F7479", "银灰": "#B7BBC0", "红色": "#BF3A2B", "深红": "#8C1B1B", "酒红": "#7A2233", "橙红": "#DE5138", "橙色": "#E5813A", "黄色": "#E7C238", "荧光黄": "#D6EF3B", "荧光绿": "#6EE049", "浅绿": "#A6CE9E", "绿色": "#3D7A4E", "深绿": "#235B3B", "军绿": "#596A44", "橄榄绿": "#6A6A39", "天蓝": "#7FB1D8", "浅蓝": "#A8CAE2", "蓝色": "#2B5EA7", "宝蓝": "#1A3E9B", "海蓝": "#1E5E79", "湖蓝": "#2D8EA7", "藏青": "#1C2A44", "卡其色": "#BEAE8D", "米色": "#E2D8C3", "杏色": "#E7C8A7", "驼色": "#AF895D", "浅棕": "#C29971", "棕色": "#7A5130", "深棕": "#4D331F", "咖啡色": "#493427", "粉色": "#E7A7B7", "紫色": "#6E4B8A", "藏蓝": "#1B2C4A", "无色": "#FFFFFF"}, "reason": {"T恤/POLO": "适合复色到skc宽度=4-8区间 件量边际收益：最优宽度为4； 爆旺款效率：高skc数如skc=17，或skc=24爆旺款率奇高，但受到样本量特小影响，综合来看skc=2~3的爆旺款效率更高 广告选中率：广告则选择了多色中的skc=13或skc=8，以及低区间的skc=5", "长裤": "适合复色到 skc 宽度=4 附近 件量边际：最优宽度 4（0.7→2.4→0.2 连续正，宽度5转-3.7）； 爆旺款效率：skc=25(100%)、skc=19(66.7%)奇高但 n=1/3，综合看 skc=2~4 最高（15.8%/18.2%/18.4%）； 广告选中率：集中于 skc=7(1.32%)、skc=4(1.18%)、skc=6(1.17%)", "衬衫/马甲": "适合复色到 skc 宽度=4~8（复色潜力最大） 件量边际：最优宽度 8（宽度2→8边际均件持续为正，宽度9转负）； 爆旺款效率：skc=14(23.7%)、skc=16(23.1%)奇高但 n=38/13，综合看 skc=2~4 最高（17.1%/16.6%/16.3%）； 广告选中率：仅 skc=1(0.75%)有一定覆盖，其余宽度广告投放暂时极少", "牛仔裤": "复色到 skc 宽度=3~5（宽SKC高收益） 件量边际：最优宽度 5（24.4→39.8→2.0→24.0 连续正，宽度6转-75.7）； 爆旺款效率：skc=8(50%)、skc=7(40%)奇高但 n=2/5，综合看 skc=2~4 最高（30.7%/36.5%/37.5%）； 广告选中率：极低，仅 skc=2(0.10%)、skc=1(0.01%)有零星覆盖", "外套夹克": "适合复色到 skc 宽度=2~3 件量边际：最优宽度 2； 爆旺款效率：skc=17(50%)奇高但 n=2，综合看 skc=1~2 最高（22.7%/23.4%）； 广告选中率：集中于高宽 skc=8(4.26%)、skc=7(1.87%)、skc=5(1.22%)是广告集中度较高的区间", "卫衣/连帽衫": "适合复色到 skc 宽度=4~7 件量边际：最优宽度 2， 但紧接skc=4也有较好增量且n较大，置信度较高； 爆旺款效率：skc=17(13.3%)、skc=18(12.5%)奇高但样本小（n=15/16），综合看 skc=2~3 最高（11.7%/9.6%）； 广告选中率：集中于 skc=7(0.92%)、skc=5(0.43%)、skc=11(0.44%)", "套装": "适合复色到skc 宽度=2~4 件量边际：最优宽度 2； 爆旺款效率：skc=24(37.5%)、skc=23(25%)奇高但 n=8/4，综合看 skc=2 最高（17.4%）； 广告选中率：集中于 skc=4(1.80%)、skc=8(1.46%)、skc=5(0.91%) 适合复色到 skc 宽度=3~6 件量边际：最优宽度 4； 爆旺款效率：skc=19(40%)、skc=21(33.3%)奇高但 n=5/3，综合看 skc=2~3 最高（25.1%/23.3%），skc=6 也达 26.1%； 广告选中率：集中于 skc=9(3.36%)、skc=6(3.17%)、skc=5(2.08%)", "短裤": "适合复色到 skc 宽度=3~4 件量边际：最优宽度 3（18.2→33.2 连续正，宽度4转负）； 爆旺款效率：skc=25(25%)、skc=16(20%)奇高但 n=4/5，综合看 skc=4 最高（15.0%），skc=1/6 居中（13.5%/14.3%）； 广告选中率：集中于 skc=8(5.65%)、skc=4(1.97%)、skc=5(1.47%)——短裤广告集中度高", "功能服": "适合复色到 skc 宽度=1~2（受供给影响，有空间） 件量边际：最优宽度 1（受供给影响），3-4件量边际为正； 爆旺款效率：skc=7(50%)、skc=4(38.1%)奇高但 n=2/21，综合看 skc=1 最高（33.95%）； 广告选中率：集中于 skc=1(2.63%)——功能服广告集中宽度1", "毛衣/开衫/针织": "适合复色到 skc 宽度=2~3 件量边际：最优宽度 2； 爆旺款效率：skc=14(33.3%)、skc=16(33.3%)奇高但 n=18/12，综合看 skc=1~3 最高（13.7%/17.2%/13.7%）； 广告选中率：集中于 skc=9(1.52%)、skc=8(1.30%)、skc=10(0.93%)", "棉服/羽绒服": "适合复色到 skc 宽度=2~4 件量边际：最优宽度 2； 爆旺款效率：skc=12/24(100%)奇高但 n=1，综合看 skc=1~4 较高（26.0%/25.3%/23.4%/26.1%）； 广告选中率：集中于 skc=4(1.53%)、skc=1(1.18%)、skc=2(0.86%)", "背心上衣": "适合复色到 skc 宽度=3 附近 件量边际：最优宽度 3； 爆旺款效率：skc=16(28.6%)、skc=21(25%)奇高但 n=7/4，综合看 skc=1~3 最高（9.2%/8.6%/9.9%）； 广告选中率：集中于 skc=3(1.19%)、skc=1(0.66%)、skc=4(0.30%)", "风衣/大衣": "适合复色到 skc 宽度=2~3 件量边际：最优宽度 3； 爆旺款效率：skc=10(100%)、skc=7(29.4%)奇高但 n=1/34，综合看 skc=1~3 较高（13.8%/17.4%/12.3%）； 广告选中率：集中于 skc=5(0.80%)、skc=3(0.51%)、skc=2(0.48%)", "传统服饰": "适合复色到 skc 宽度=2 附近 件量边际：最优宽度 2； 爆旺款效率：skc=2(33.3%, n=15)、skc=4(25%, n=4)较突出，但全集样本偏小，无稳定大样本区间； 广告选中率：几乎无广告覆盖", "泳衣泳裤": "适合复色到 skc 宽度=3~4 件量边际收益：最优宽度 4（宽度3、4边际均件 26.6→65.0 连续提升，宽度5转负），单款件均达 120.6 件，是各品类件均最高之一； 爆旺款效率：skc=18/14 奇高但样本极小不参考；综合 skc=2~4 最高（9.7%/9.0%/12.1%）； 广告选中率：高度集中在 skc=3（4.51%），其次 skc=8（3.70%）、skc=5（2.94%），与件均峰值区间重合", "打底/压缩": "适合复色到 skc 宽度=3 附近 件量边际：最优宽度 3； 爆旺款效率：skc=9(15.4%)、skc=7(14.3%)奇高但 n=13/7，综合看 skc=1 最高（12.6%）； 广告选中率：仅 skc=1(0.82%)有覆盖，其余极少", "防晒衫": "适合复色到 skc 宽度=4 附近 件量边际：最优宽度 4； 爆旺款效率：skc=5(100%)奇高但 n=1，综合看 skc=1 为基准（7.33%），skc=2 达 30%（n=20 样本偏小）； 广告选中率：暂时几乎无广告覆盖", "连体/背带": "适合复色到 skc 宽度=3 附近 件量边际：最优宽度 3； 爆旺款效率：skc=4(71.4%, n=7)、skc=3(54.6%, n=11)奇高但样本整体偏小； 广告选中率：几乎无广告覆盖"}};
+const BLOCKS = DATA.blocks, COLORS = DATA.colors, REASON = DATA.reason;
+const GROUPS = ['男装（时尚）','男装（运动）'];
+let cur = 0, tier = 0, grp = '男装（时尚）';
+
+function hex(n){ return COLORS[n] || '#C9C2B2'; }
+function sw(n, size){
+  const h = hex(n);
+  const bg = h === 'MIX'
+    ? 'background:repeating-linear-gradient(45deg,#141414 0 6px,#B9B2A2 6px 12px,#7A5130 12px 18px,#E2D8C3 18px 24px)'
+    : 'background:' + h;
+  return `<span class="sw sw-${size||'md'}" style="${bg};border:1px solid rgba(20,17,12,.22)" title="${n}"></span>`;
+}
+const el = id => document.getElementById(id);
+function nameOf(b){ return b.label || b.l1; }
+
+/* tabs */
+document.querySelectorAll('.tabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on', b===btn));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on', p.id===btn.dataset.t));
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+});
+
+/* picker */
+function renderPickers(){
+  el('grpTabs').innerHTML = GROUPS.map(g=>{
+    const n = BLOCKS.filter(b=>b.grp===g).length;
+    return `<button class="gt ${g===grp?'on':''}" data-g="${g}">${g}<i>${n}</i></button>`;
+  }).join('');
+  el('grpTabs').querySelectorAll('.gt').forEach(t=>{
+    t.onclick = ()=>{ grp = t.dataset.g; const f = BLOCKS.findIndex(b=>b.grp===grp); cur = f; tier = 0; renderAll(); };
+  });
+  const items = BLOCKS.map((b,i)=>({b,i})).filter(x=>x.b.grp===grp);
+  el('picker').innerHTML = items.map(({b,i})=>
+    `<button class="chip ${i===cur?'on':''}" data-i="${i}">${nameOf(b)}<span class="w">${b.width}</span></button>`).join('');
+  el('picker').querySelectorAll('.chip').forEach(c=>{
+    c.onclick = ()=>{ cur = +c.dataset.i; tier = 0; renderAll(); };
+  });
+  const b = BLOCKS[cur];
+  el('selCur').innerHTML = `<b>${nameOf(b)}</b><span>${b.grp} · 推荐宽度 ${b.width}</span>`;
+}
+
+/* tab1 */
+function parseRange(w){
+  if(!w) return null;
+  w = w.replace(/[–—~～]/g,'-');
+  if(w.includes('-')){ const p = w.split('-').map(Number); return p.some(isNaN)?null:p; }
+  const a = Number(w); return isNaN(a)?null:[a,a];
+}
+function renderWidth(){
+  const b = BLOCKS[cur], r = parseRange(b.width) || [1,1];
+  const max = Math.max(8, Math.ceil(r[1])+1);
+  let cells='', nums='';
+  for(let i=1;i<=max;i++){
+    const inR = i>=r[0] && i<=r[1], isOpt = i===r[0];
+    cells += `<span class="${isOpt?'opt':(inR?'in':'')}"></span>`;
+    nums  += `<b class="${inR?'in':''}">${i}</b>`;
+  }
+  const reason = REASON[b.base] || REASON[b.l1] || '';
+  let parts = reason.split(/\s+(?=(?:件量边际收益|件量边际|爆旺款效率|广告选中率)[:：])/).map(s=>s.trim()).filter(Boolean);
+  if(parts.length<=1) parts = reason.split(/\s{2,}/).map(x=>x.trim()).filter(Boolean);
+  const rows = parts.length ? parts.map(p=>{
+    const m = p.match(/^(件量边际收益|件量边际|爆旺款效率|广告选中率)[:：]?([\s\S]*)$/);
+    if(!m) return `<div class="reason"><b>结论</b><span>${p}</span></div>`;
+    return `<div class="reason"><b>${m[1].replace('收益','')}</b><span>${m[2].replace(/^[:：]/,'').trim()}</span></div>`;
+  }).join('') : `<div class="reason"><b>结论</b><span>该品类样本偏小，宽度以相邻品类与整体节奏为参考。</span></div>`;
+
+  el('widthCard').innerHTML = `
+    <h3>${nameOf(b)} · 推荐宽度与依据</h3>
+    <div class="sub">${b.grp}　${b.sub!==b.l1?b.sub:b.l1}</div>
+    <div class="width-box" style="margin-top:18px">
+      <div><div class="big">${b.width}<small>推荐 SKC 宽度（个/款）</small></div></div>
+      <div>
+        <div class="scale-track">${cells}</div>
+        <div class="scale-num">${nums}</div>
+        <div class="scale-legend">
+          <span><i style="background:#E8A08F"></i>件量边际最优点</span>
+          <span><i style="background:var(--acc)"></i>推荐区间</span>
+          <span><i style="background:var(--paper2);border:1px solid var(--line)"></i>不建议超过</span>
+        </div>
+      </div>
+    </div>
+    <div class="reasons">${rows}</div>`;
+}
+function renderTable(){
+  el('widthTable').innerHTML = BLOCKS.map((b,i)=>`
+    <tr data-i="${i}" style="cursor:pointer;${i===cur?'background:#F7F1E4':''}">
+      <td style="color:var(--muted);font-size:12.5px">${b.grp.replace('男装','')}</td>
+      <td><b>${nameOf(b)}</b>${b.dupsub?`<span style="color:var(--muted);font-size:11.5px"> · ${b.dupsub}</span>`:''}</td>
+      <td class="n"><b style="color:var(--acc);font-size:14.5px">${b.width}</b></td>
+      <td class="n">${b.rows[0].thr} <span style="font-size:11px;color:var(--muted);font-weight:600">件/日</span></td>
+    </tr>`).join('');
+  el('widthTable').querySelectorAll('tr').forEach(tr=>{
+    tr.onclick = ()=>{ cur = +tr.dataset.i; tier = 0; grp = BLOCKS[cur].grp; renderAll(); };
+  });
+}
+
+/* tab2 */
+const PDEF = {
+  P0:{name:'P0 必做', def:'站内外同为头部色'},
+  P1:{name:'P1 优先', def:'站内供需差头部色'},
+  P2:{name:'P2 补位', def:'站内头部色'},
+  P3:{name:'P3 拓展', def:'站外头部色'}
+};
+function renderPri(){
+  const b = BLOCKS[cur];
+  el('s2Title').textContent = `${nameOf(b)} · 复色优先级`;
+  el('priGrid').innerHTML = ['P0','P1','P2','P3'].map(p=>{
+    const cols = b.det[p] || [];
+    const body = cols.length
+      ? `<div class="sws">${cols.map(c=>`<div class="item">${sw(c,'lg')}<span class="nm">${c}</span></div>`).join('')}</div>`
+      : `<div class="empty">本级为空 → 其后各级整体上移</div>`;
+    return `<div class="pcard ${p==='P0'?'p0':''}">
+        <span class="tag">${PDEF[p].name}</span>
+        <div class="def">${PDEF[p].def}${cols.length?` · ${cols.length} 色`:''}</div>
+        ${body}</div>`;
+  }).join('');
+}
+function seasonCols(k){
+  const b = BLOCKS[cur], s = b.season;
+  if(!s) return null;
+  return (s[k] || '').split('|').map(x=>x.trim()).filter(Boolean);
+}
+function renderSeason(){
+  const box = el('seasonBox');
+  const dong = seasonCols('dong'), xia = seasonCols('xia');
+  if(!dong && !xia){ box.innerHTML='<div class="empty">该细分无常备季节对比数据</div>'; return; }
+  const block = (label, note, cols) => !cols ? '' : `
+    <div class="sblock">
+      <div class="sblock-h"><b>${label}</b><span>${note}</span></div>
+      <div class="season-row">
+        ${cols.map((c,idx)=>`<div class="sitem"><span class="rank">${idx+1}</span>${sw(c,'md')}<span class="nm">${c}</span></div>`).join('')}
+      </div>
+    </div>`;
+  box.innerHTML =
+    block('冬季升色 TOP5', '7 月 → 11 月占比提升最快', dong) +
+    block('夏季升色 TOP5', '11 月 → 7 月占比提升最快', xia);
+}
+
+/* tab3 */
+const TIP = {
+  P0:'上架 7 天内就跑到门槛的款，是当季最可能爆的一批——立刻补色抢爆款窗口。',
+  P1:'上架 8–30 天的上升款，热度已确认但尚未定型；补色并配合广告追投，拉长上升曲线。',
+  P2:'上架 31–90 天、仍在过门槛的款，属于稳定动销；补色做的是覆盖，不是冲量。',
+  P3:'上架 90–305 天的非应季长青款，做的是品类常备色，节奏放慢、以保覆盖为主。',
+  P4:'去年同期上架、去年同期热卖的款，是最可靠的历史参照；照去年卖得好的颜色复色，成功率最高。',
+  P5:'上架超一年、近期还在热卖的款，说明是真长青；门槛最高，但过线就值得稳定复色。'
+};
+const TIER_ORDER = ['P0','P1','P2','P3','P4','P5'];
+
+function renderActHead(){
+  const b = BLOCKS[cur];
+  el('actHead').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap">
+      <div>
+        <div class="block-tag"><i>执行卡</i>${b.grp}</div>
+        <h3 style="font-size:26px;margin:2px 0 4px">${nameOf(b)}</h3>
+        <div class="sub">起步门槛 <b style="color:var(--acc)">${b.rows[0].thr} 件/日</b>　·　推荐宽度 <b style="color:var(--acc)">${b.width} 个色</b></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11.5px;color:var(--muted);letter-spacing:.1em">先看这一句</div>
+        <div style="font-size:14px;font-weight:900;line-height:1.45;max-width:32em">
+          日均 ≥ ${b.rows[0].thr} 件就动手，铺 ${b.width} 个色<br>颜色按 P0 → P3 顺序取
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderLadder(){
+  const b = BLOCKS[cur];
+  if(tier >= b.rows.length) tier = 0;
+  el('ladder').innerHTML = b.rows.map((r,i)=>`
+    <div class="lrow ${i===tier?'on':''} ${r.pri==='P0'?'p0':''}" data-i="${i}">
+      <div class="lp">${r.pri}</div>
+      <div class="lt"><b>${r.time}</b><span>${r.type}</span></div>
+      <div class="ln">${r.thr}<small>件/日</small></div>
+    </div>`).join('');
+  el('ladder').querySelectorAll('.lrow').forEach(x=>{
+    x.onclick = ()=>{ tier = +x.dataset.i; renderLadder(); renderActBar(); };
+  });
+}
+
+function renderColors(){
+  const b = BLOCKS[cur];
+  el('colorsSub').innerHTML = `推荐宽度 <b style="color:var(--acc)">${b.width}</b> 个色 · 颜色按 P0→P3 顺序取`;
+  const rows = ['P0','P1','P2','P3'].map(p=>{
+    const cols = b.det[p] || [];
+    const body = cols.length
+      ? `<div class="cchips">${cols.map(c=>`<div class="cchip">${sw(c,'md')}<span class="nm">${c}</span></div>`).join('')}</div>`
+      : `<div class="empty">本级为空 → 后一级整体上移顶上</div>`;
+    return `<div class="crow"><span class="cp ${p.toLowerCase()}">${p}</span><div>${body}</div></div>`;
+  }).join('');
+  const dong = seasonCols('dong'), xia = seasonCols('xia');
+  const srow = (label, cols) => !cols ? '' : `
+    <div class="crow season">
+      <span class="cp">季</span>
+      <div>
+        <div style="font-size:11.5px;font-weight:900;color:var(--ink2);margin-bottom:6px">
+          ${label}　<span style="font-weight:600;color:var(--muted)">只做加看，不替代上面的顺序</span>
+        </div>
+        <div class="cchips">${cols.map(c=>`<div class="cchip">${sw(c,'md')}<span class="nm">${c}</span></div>`).join('')}</div>
+      </div>
+    </div>`;
+  const seasonRow = srow('冬季升色 TOP5', dong) + srow('夏季升色 TOP5', xia);
+  el('colorList').innerHTML = rows + seasonRow;
+}
+
+function renderActBar(){
+  const b = BLOCKS[cur], r = b.rows[tier];
+  el('actBar').innerHTML = `
+    <div class="ab-h">${r.pri} · ${r.time}　${r.type}</div>
+    <div class="ab-line">
+      <span class="ab-p hi">日均销量 ≥ ${r.thr} 件/日</span>
+      <span class="ab-p">复色到 ${b.width} 个色</span>
+      <span class="ab-p">颜色按 P0 → P3 顺序取</span>
+    </div>
+    <div class="ab-tip">${TIP[r.pri]||''}</div>`;
+}
+
+function renderPeers(){
+  const list = BLOCKS.map((b,i)=>({b,i})).filter(x=>x.b.grp===BLOCKS[cur].grp);
+  el('peerTitle').textContent = `${BLOCKS[cur].grp} · 同组细分对照（${list.length} 个）`;
+  el('peerList').innerHTML = list.map(({b,i})=>{
+    const p0 = b.det.P0 || [];
+    const dots = p0.slice(0,4).map(c=>`<span class="pdot" style="${hex(c)==='MIX'?'background:repeating-linear-gradient(45deg,#141414 0 3px,#B9B2A2 3px 6px)':'background:'+hex(c)}"></span><span class="pnm">${c}</span>`).join('');
+    return `<div class="peer ${i===cur?'on':''}" data-i="${i}">
+      <div class="pn">${nameOf(b)}${b.sub!==b.l1?`<span>下拆：${b.sub}</span>`:''}</div>
+      <div class="pw">${b.width}</div>
+      <div class="pt">${b.rows[0].thr}<small> 件/日</small></div>
+      <div class="pc">${dots||'<span class="pnm">无 P0 色</span>'}</div>
+    </div>`;
+  }).join('');
+  el('peerList').querySelectorAll('.peer').forEach(x=>{
+    x.onclick = ()=>{ cur = +x.dataset.i; tier = 0; renderAll(); };
+  });
+}
+
+function renderAll(){
+  renderPickers(); renderWidth(); renderTable(); renderPri(); renderSeason();
+  renderActHead(); renderLadder(); renderColors(); renderActBar(); renderPeers();
+}
+renderAll();
+</script>
+</body>
+</html>
